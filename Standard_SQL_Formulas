@@ -1,0 +1,7 @@
+## When you don't want particular text in your code. In this case, we don't want "qsedev" within the email addresses
+
+SELECT u.id, u.email
+FROM User u
+WHERE u.locale = "en_ZA"
+AND u.email NOT LIKE '%qsedev%'
+LIMIT 100;
