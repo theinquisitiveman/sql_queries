@@ -1,0 +1,25 @@
+import pandas as pd
+import sqlite3
+
+data = pd.read_csv("df_to_vertica_temp.csv")
+conn = sqlite3.connect(":memory:")
+cursor = conn.cursor()
+
+# copy the dataframe into the db
+try:
+	data.to_sql("data", conn, index=False)
+# if it already exists just drop it and rewrite it
+except:
+	cursor.execute("DROP TABLE data")
+	data.to_sql("data", conn, index=False)
+
+conn.commit()
+
+result = pd.read_sql_query("""
+SELECT 
+    * 
+FROM data
+LIMIT 5
+""", conn)
+
+print(result)
